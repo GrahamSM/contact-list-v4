@@ -35,11 +35,23 @@
   font-size: 2em;
   text-align: center;
 }
+
+#hide-button{
+  background: #3498db;
+  padding: 5px;
+  width: 100px;
+  height: 60px;
+  margin-top: 10px;
+  color: white;
+  font-weight: bold;
+  font-size: 2em;
+  text-align: center;
+}
 /*end buttons*/
 
 
 /*new contact form*/
 .contact-form{
-  
+
 }
 /*end new contact form*/

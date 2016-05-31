@@ -33,6 +33,8 @@
   </div>
 </div>
 
+
+
 <div class="new-contact-form">
   <form class="contact-form" action="/contact/new" method="post">
         <input id="first_name" type="text" name="first" placeholder="First Name"><br>
@@ -51,24 +53,31 @@
 </div>
 
 <div class="all-contacts-list">
-  <button type="button" class="btn btn-raised btn-primary" id = "hide-contacts">Hide</button>
+  <button type="button" class="btn btn-raised btn-primary" id = "hide-button">Hide</button>
   <ul class="all-contacts">
   </ul>
 </div>
 
+<div class="display-contact">
+  <button type="button" class="btn btn-raised btn-primary" id = "hide-button">Hide</button>
+  <h2 id="contact-name"></h2>
+  <p id="contact-email"></p>
+  <p id="contact-primary"></p>
+</div>
+
 
 <script>
+
 $('.contact-form').hide();
 $('.show-contact-form').hide();
 $('.all-contacts-list').hide();
-
+$('.display-contact').hide();
 
 function contactFormPathOnly(path_url){
   $('.contact-form').slideToggle();
-  $('.contact-form').submit(function(event) {
-    var target = $(event.target);
-    var form = target.closest('form');
+  $('.contact-form').on('submit', function(event) {
     event.preventDefault();
+    var form = $(this);
     $.ajax({
       url: path_url,
       type: 'POST',
@@ -76,12 +85,12 @@ function contactFormPathOnly(path_url){
     }).done(function(response_data) {
       $('.contact-form').slideUp();
     })
-  });
+  })
 }
 
 function contactFormUpdate(path_url, id){
   $('.contact-form').slideToggle();
-  $('.contact-form').submit(function(event) {
+  $('.contact-form').on('submit', function(event) {
     var target = $(event.target);
     var form = target.closest('form');
     event.preventDefault();
@@ -92,9 +101,8 @@ function contactFormUpdate(path_url, id){
     }).done(function(response_data) {
       $('.contact-form').slideUp();
     })
-  });
+  })
 }
-
 
 $("#btn-new").on('click', function(e) {
   contactFormPathOnly('/contact/new')
@@ -102,7 +110,7 @@ $("#btn-new").on('click', function(e) {
 
 $("#btn-show").on('click', function(e) {
   $('.show-contact-form').slideToggle();
-  $('.show-contact-form').submit(function(event) {
+  $('.show-contact-form').on('submit', function(event) {
     var target = $(event.target);
     var form = target.closest('form');
     event.preventDefault();
@@ -111,15 +119,22 @@ $("#btn-show").on('click', function(e) {
       type: 'GET',
       data: form.serialize()
     }).done(function(response_data) {
-      debugger;
       $('.show-contact-form').slideUp();
-    })
+      $('.display-contact #contact-name').empty();
+      $('.display-contact #contact-email').empty();
+      $('.display-contact #contact-name').html(response_data.contact.first_name);
+      $('.display-contact #contact-email').html(response_data.contact.email);
+      $('.display-contact').slideDown();
+      $("#hide-button").on('click', function(e){
+        $('.display-contact').slideUp();
+      });
+    });
   });
 });
 
 $("#btn-update").on('click', function(e) {
   $('.show-contact-form').slideToggle();
-  $('.show-contact-form').submit(function(event) {
+  $('.show-contact-form').on('submit', function(event) {
     var target = $(event.target);
     var form = target.closest('form');
     event.preventDefault();
@@ -142,13 +157,17 @@ $("#btn-list").on('click', function(e) {
     url: '/contacts/all',
     type: 'GET'
   }).done(function(response_data) {
+    debugger;
     for (var i = 0; i < response_data.contacts.length; i++){
-      $('.all-contacts').append('<h3>' + response_data.contacts[i].first_name +  ' ' + response_data.contacts[i].last_name + '</h3>' + '<p>' + response_data.contacts[i].email + '</p>')
+      $('.all-contacts').append('<h3>' + response_data.contacts[i].first_name +  ' ' + response_data.contacts[i].last_name + '</h3>' + '<p>' + response_data.contacts[i].email + '</p>');
+      // for (var j = 0; j < response_data.contacts[i].numbers.length; j++){
+      //   $('.all-contacts').append('<small>' + response_data.contacts[i].numbers[j] + '</small>');
+      // }
     }
   })
 });
 
-$("#hide-contacts").on('click', function(e){
+$("#hide-button").on('click', function(e){
   $('.all-contacts-list').slideUp();
   $('.all-contacts').empty();
 })

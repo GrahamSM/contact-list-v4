@@ -10,13 +10,14 @@ get '/contact/show' do
 end
 
 post '/contact/new' do
+  content_type :json
   @contact = Contact.new
   @contact.first_name = params[:first]
   @contact.last_name = params[:last]
   @contact.numbers << Number.new(phone_number:params[:number])
   @contact.email = params[:email]
-  binding.pry
   @contact.save
+  {contact: @contact}
 end
 
 post '/contact/update' do
