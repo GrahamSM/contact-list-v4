@@ -1,1 +1,137 @@
-<h1>Home Page</h1>
+
+<div class="container" id="title-container">
+  <h1 class="title">Contact List</h1>
+</div>
+<div class="container">
+  <div id="btn-list">
+    <form>
+      <button type="button" class="btn btn-raised btn-primary">List</button>
+    </form>
+  </div>
+  <div id="btn-number">
+    <form>
+      <button type="button" class="btn btn-raised btn-primary">Number</button>
+    </form>
+  </div>
+  <div id="btn-new">
+      <button type="button" class="btn btn-raised btn-primary">New</button>
+  </div>
+  <div id="btn-show">
+    <form>
+      <button type="button" class="btn btn-raised btn-primary">Show</button>
+    </form>
+  </div>
+  <div id="btn-update">
+    <form>
+      <button type="button" class="btn btn-raised btn-primary">Update</button>
+    </form>
+  </div>
+  <div id="btn-destroy">
+    <form>
+      <button type="button" class="btn btn-raised btn-primary">Destroy</button>
+    </form>
+  </div>
+</div>
+<div class="new-contact-form">
+  <form class="contact-form" action="/contact/new" method="post">
+        <input id="first_name" type="text" name="first" placeholder="First Name"><br>
+        <input id="last_name" type="text" name="last" placeholder="Last Name"><br>
+        <input id="number" type="text" name="number" placeholder="Phone Number"><br>
+        <input id="email" type="text" name="email" placeholder="Email"><br>
+        <input type="submit" value="Submit">
+  </form>
+</div>
+<div class="show-contact-form">
+  <form class="show-contact" action="/contact/show">
+    <input id="contact_id" type="text" name="id" placeholder="ID of Contact"><br>
+    <input type="submit" value="Submit">
+  </form>
+</div>
+
+
+<script>
+$('.contact-form').hide();
+$('.show-contact-form').hide();
+
+function contactForm(path_url){
+  $('.contact-form').slideToggle();
+  $('.contact-form').submit(function(event) {
+    var target = $(event.target);
+    var form = target.closest('form');
+    event.preventDefault();
+    $.ajax({
+      url: path_url,
+      type: 'POST',
+      data: form.serialize()
+    }).done(function(response_data) {
+      $('.contact-form').slideUp();
+    })
+  });
+}
+
+function contactForm(path_url, id){
+  $('.contact-form').slideToggle();
+  $('.contact-form').submit(function(event) {
+    var target = $(event.target);
+    var form = target.closest('form');
+    event.preventDefault();
+    $.ajax({
+      url: path_url,
+      type: 'POST',
+      data: {form_data: form.serialize(), contact_id: id}
+    }).done(function(response_data) {
+      $('.contact-form').slideUp();
+    })
+  });
+}
+
+
+$("#btn-new").on('click', function(e) {
+  contactForm('/contact/new')
+});
+
+$("#btn-show").on('click', function(e) {
+  $('.show-contact-form').slideToggle();
+  $('.show-contact-form').submit(function(event) {
+    var target = $(event.target);
+    var form = target.closest('form');
+    event.preventDefault();
+    $.ajax({
+      url: form.attr('action'),
+      type: 'GET',
+      data: form.serialize()
+    }).done(function(response_data) {
+      $('.show-contact-form').slideUp();
+    })
+  });
+});
+
+$("#btn-update").on('click', function(e) {
+  $('.show-contact-form').slideToggle();
+  $('.show-contact-form').submit(function(event) {
+    var target = $(event.target);
+    var form = target.closest('form');
+    event.preventDefault();
+    $.ajax({
+      url: form.attr('action'),
+      type: 'GET',
+      data: form.serialize()
+    }).done(function(response_data) {
+      $('.show-contact-form').slideUp();
+      var path_url = '/contact/update';
+      contactForm(path_url, response_data.contact.id);
+    })
+  });
+});
+
+
+$("#btn-list").on('click', function(e) {
+  $.ajax({
+    url: '/contacts/all',
+    type: 'GET'
+  }).done(function(response_data) {
+    debugger;
+  })
+});
+
+</script>
