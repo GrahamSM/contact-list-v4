@@ -32,6 +32,7 @@
     </form>
   </div>
 </div>
+
 <div class="new-contact-form">
   <form class="contact-form" action="/contact/new" method="post">
         <input id="first_name" type="text" name="first" placeholder="First Name"><br>
@@ -41,6 +42,7 @@
         <input type="submit" value="Submit">
   </form>
 </div>
+
 <div class="show-contact-form">
   <form class="show-contact" action="/contact/show">
     <input id="contact_id" type="text" name="id" placeholder="ID of Contact"><br>
@@ -48,12 +50,20 @@
   </form>
 </div>
 
+<div class="all-contacts-list">
+  <button type="button" class="btn btn-raised btn-primary" id = "hide-contacts">Hide</button>
+  <ul class="all-contacts">
+  </ul>
+</div>
+
 
 <script>
 $('.contact-form').hide();
 $('.show-contact-form').hide();
+$('.all-contacts-list').hide();
 
-function contactForm(path_url){
+
+function contactFormPathOnly(path_url){
   $('.contact-form').slideToggle();
   $('.contact-form').submit(function(event) {
     var target = $(event.target);
@@ -69,7 +79,7 @@ function contactForm(path_url){
   });
 }
 
-function contactForm(path_url, id){
+function contactFormUpdate(path_url, id){
   $('.contact-form').slideToggle();
   $('.contact-form').submit(function(event) {
     var target = $(event.target);
@@ -87,7 +97,7 @@ function contactForm(path_url, id){
 
 
 $("#btn-new").on('click', function(e) {
-  contactForm('/contact/new')
+  contactFormPathOnly('/contact/new')
 });
 
 $("#btn-show").on('click', function(e) {
@@ -101,6 +111,7 @@ $("#btn-show").on('click', function(e) {
       type: 'GET',
       data: form.serialize()
     }).done(function(response_data) {
+      debugger;
       $('.show-contact-form').slideUp();
     })
   });
@@ -119,19 +130,27 @@ $("#btn-update").on('click', function(e) {
     }).done(function(response_data) {
       $('.show-contact-form').slideUp();
       var path_url = '/contact/update';
-      contactForm(path_url, response_data.contact.id);
+      contactFormUpdate(path_url, response_data.contact.id);
     })
   });
 });
 
 
 $("#btn-list").on('click', function(e) {
+  $('.all-contacts-list').slideDown();
   $.ajax({
     url: '/contacts/all',
     type: 'GET'
   }).done(function(response_data) {
-    debugger;
+    for (var i = 0; i < response_data.contacts.length; i++){
+      $('.all-contacts').append('<h3>' + response_data.contacts[i].first_name +  ' ' + response_data.contacts[i].last_name + '</h3>' + '<p>' + response_data.contacts[i].email + '</p>')
+    }
   })
 });
+
+$("#hide-contacts").on('click', function(e){
+  $('.all-contacts-list').slideUp();
+  $('.all-contacts').empty();
+})
 
 </script>
