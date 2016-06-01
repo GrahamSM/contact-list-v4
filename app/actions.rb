@@ -5,7 +5,10 @@ end
 
 get '/contact/show' do
   content_type :json
-  @contact = Contact.find(params[:contact_id].to_i)
+  if Contact.find(params[:form_data].to_i)
+    @contact = Contact.find(params[:form_data].to_i)
+  end
+  binding.pry
   {contact: @contact}.to_json
 end
 
@@ -16,7 +19,6 @@ post '/contact/new' do
   @contact.last_name = params[:form_data][1]
   @contact.numbers << Number.new(phone_number: params[:form_data][2])
   @contact.email = params[:form_data][3]
-  binding.pry
   if @contact.save
     {contact: @contact}.to_json
   else

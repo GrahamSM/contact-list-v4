@@ -100,7 +100,6 @@ function contactFormNew(path_url){
     for (var i = 0; i < num_elements-1; i++){
       input_data.push(input_form.elements[i].value);
     }
-    debugger;
     $.ajax({
       url: path_url,
       type: 'POST',
@@ -135,13 +134,14 @@ $("#btn-show").on('click', function(e) {
   $('.bottom-div').empty();
   $('.show-contact-form').slideToggle();
   $('.show-contact-form').on('submit', function(event) {
-    var target = $(event.target);
-    var form = target.closest('form');
     event.preventDefault();
+    var input_form = document.getElementById("default-form-show");
+    var num_elements = input_form.elements.length;
+    input_data = input_form.elements[0].value;
     $.ajax({
-      url: form.attr('action'),
+      url: $(this).attr('action'),
       type: 'GET',
-      data: form.serialize()
+      data: {form_data: input_data},
     }).done(function(response_data) {
       var source = $("#show-template").html();
       var template = Handlebars.compile(source);
@@ -150,9 +150,6 @@ $("#btn-show").on('click', function(e) {
       $('.bottom-div').append(html);
       $('.show-contact-form').slideUp();
       $('.bottom-div').slideDown();
-      // $('.display-contact #contact-name').html(response_data.contact.first_name);
-      // $('.display-contact #contact-email').html(response_data.contact.email);
-      // $('.display-contact').slideDown();
     });
   });
 });
