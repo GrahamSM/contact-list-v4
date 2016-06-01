@@ -113,12 +113,17 @@ function contactFormNew(path_url){
 function contactFormUpdate(path_url, id){
   $('.new-contact-form').slideToggle();
   $('.new-contact-form').on('submit', function(event) {
-    var form = $(this);
     event.preventDefault();
+    var input_form = document.getElementById("default-form-new");
+    var num_elements = input_form.elements.length;
+    input_data = [];
+    for (var i = 0; i < num_elements-1; i++){
+      input_data.push(input_form.elements[i].value);
+    }
     $.ajax({
       url: path_url,
       type: 'POST',
-      data: {form_data: form.serialize(), contact_id: id}
+      data: {form_data: input_data, contact_id: id}
     }).done(function(response_data) {
       $('.new-contact-form').slideUp();
       // SOMECOMMANDTOSHOWTHENEWCONTACT
@@ -157,13 +162,14 @@ $("#btn-show").on('click', function(e) {
 $("#btn-update").on('click', function(e) {
   $('.show-contact-form').slideToggle();
   $('.show-contact-form').on('submit', function(event) {
-    var target = $(event.target);
-    var form = target.closest('form');
     event.preventDefault();
+    var input_form = document.getElementById("default-form-show");
+    var num_elements = input_form.elements.length;
+    input_data = input_form.elements[0].value;
     $.ajax({
-      url: form.attr('action'),
+      url: $(this).attr('action'),
       type: 'GET',
-      data: form.serialize()
+      data: {form_data: input_data},
     }).done(function(response_data) {
       $('.show-contact-form').slideUp();
       var path_url = '/contact/update';

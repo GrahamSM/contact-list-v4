@@ -8,7 +8,6 @@ get '/contact/show' do
   if Contact.find(params[:form_data].to_i)
     @contact = Contact.find(params[:form_data].to_i)
   end
-  binding.pry
   {contact: @contact}.to_json
 end
 
@@ -28,11 +27,10 @@ end
 
 post '/contact/update' do
   content_type :json
-  binding.pry
   @contact = Contact.find(params[:contact_id].to_i)
-  @contact.first_name = params[:first]
-  @contact.last_name = params[:last]
-  @contact.email = params[:email]
+  @contact.first_name = params[:form_data][0]
+  @contact.last_name = params[:form_data][1]
+  @contact.email = params[:form_data][3]
   if !(@contact.save)
     erb :index
   end
