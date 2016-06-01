@@ -61,11 +61,7 @@
 /*end buttons*/
 
 
-/*new contact form*/
-.contact-form{
 
-}
-/*end new contact form*/
 
 /*contact display*/
 .display-contact{
@@ -80,3 +76,53 @@
   padding:5px;
 }
 /*end contact display*/
+
+/*input forms*/
+#default-form{
+  background: rgba(200, 200, 200, 0.4);
+  border: 1px solid rgba(150, 150, 150, 0.5);
+  border-radius: 4px;
+  margin: 50px auto 0;
+  padding: 10px;
+  width: 240px;
+}
+
+#default-form{
+  background: rgba(200, 200, 200, 0.6);
+}
+
+input {
+  display: block;
+  font-size: 20px;
+  margin: 5px auto;
+  padding: 10px;
+}
+
+input {
+  opacity: 0.5;
+}
+
+input:hover,
+input:focus {
+  opacity: 1;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  outline: none;
+}
+
+input[type="submit"] {
+  appearance: none;
+  background: linear-gradient(#58f, #37f 70%, #46f);
+  border: 1px solid #33f;
+  border-radius: 4px;
+  color: #eee;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background: linear-gradient(#79f, #37f 70%, #46f);
+}
+
+/*end input forms*/
