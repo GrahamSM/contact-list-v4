@@ -39,6 +39,17 @@
 #hide-button{
   background: #3498db;
   padding: 5px;
+  width: 75px;
+  height: 35px;
+  margin-top: 10px;
+  color: white;
+  font-size: 1.25em;
+  text-align: center;
+}
+
+#hide-contact-button{
+  background: #3498db;
+  padding: 5px;
   width: 100px;
   height: 60px;
   margin-top: 10px;
@@ -55,3 +66,17 @@
 
 }
 /*end new contact form*/
+
+/*contact display*/
+.display-contact{
+  border: 1px solid black;
+  border-radius:5px;
+  width:50%;
+  margin:auto;
+}
+
+.display-contact-inner{
+  margin:5px;
+  padding:5px;
+}
+/*end contact display*/
