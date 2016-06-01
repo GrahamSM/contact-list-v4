@@ -31,8 +31,9 @@ post '/contact/update' do
   @contact = Contact.find(params[:contact_id].to_i)
   if !(@contact.update(first_name: params[:form_data][0], last_name: params[:form_data][1], email: params[:form_data][3]))
     erb :index
+  else
+    {contact: @contact}.to_json
   end
-  {contact: @contact}.to_json
 end
 
 get '/contact/destroy' do
@@ -58,3 +59,8 @@ post '/contact/add_number' do
   @contact.numbers << @number
   erb :index
 end
+
+
+# TODO: proper error handling. UI/UX.. i.e. No contacts, error here. JS, or just use erb?
+# TODO: Multiple append on btn-show?
+# TODO: refactor!

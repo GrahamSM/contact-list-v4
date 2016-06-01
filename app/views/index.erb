@@ -2,23 +2,23 @@
 <div class="container" id="title-container">
   <h1 class="title">Contact List</h1>
 </div>
-<div class="container">
+<div class="container" id="button-container">
   <div id="btn-list">
     <form>
-      <button type="button" class="btn btn-raised btn-primary" id="list-btn">List</button>
+      <button type="button" class="btn btn-raised btn-primary" id="list-btn">List All</button>
     </form>
   </div>
   <div id="btn-number">
     <form>
-      <button type="button" class="btn btn-raised btn-primary">Number</button>
+      <button type="button" class="btn btn-raised btn-primary">Add a Number</button>
     </form>
   </div>
   <div id="btn-new">
-      <button type="button" class="btn btn-raised btn-primary">New</button>
+      <button type="button" class="btn btn-raised btn-primary">New Contact</button>
   </div>
   <div id="btn-show">
     <form>
-      <button type="button" class="btn btn-raised btn-primary">Show</button>
+      <button type="button" class="btn btn-raised btn-primary">Search</button>
     </form>
   </div>
   <div id="btn-update">
@@ -28,7 +28,7 @@
   </div>
   <div id="btn-destroy">
     <form>
-      <button type="button" class="btn btn-raised btn-primary" id="destroy-btn">Destroy</button>
+      <button type="button" class="btn btn-raised btn-primary" id="destroy-btn">Delete</button>
     </form>
   </div>
 </div>
@@ -89,6 +89,15 @@
 
 <script>
 var num_list_calls = 0;
+$('.btn').on('click', function(){
+  $('.new-contact-form').hide();
+  $('.show-contact-form').hide();
+  $('.delete-contact-form').hide();
+  $('.display-contact').hide();
+  $('.number-contact-form').hide();
+  $('.bottom-div').empty();
+});
+
 $('.new-contact-form').hide();
 $('.show-contact-form').hide();
 $('.delete-contact-form').hide();
@@ -143,12 +152,10 @@ $("#btn-new").on('click', function(e) {
 });
 
 $("#btn-show").on('click', function(e) {
-  $('.bottom-div').empty();
   $('.show-contact-form').slideToggle();
   $('.show-contact-form').on('submit', function(event) {
     event.preventDefault();
     var input_form = document.getElementById("default-form-show");
-    var num_elements = input_form.elements.length;
     input_data = input_form.elements[0].value;
     $.ajax({
       url: $(this).attr('action'),
@@ -187,10 +194,10 @@ $("#btn-update").on('click', function(e) {
 
 $("#btn-list").on('click', function(e) {
   if (num_list_calls%2==0){
-    $('.bottom-div').slideDown(); //
+    $('.bottom-div').slideDown();
   }
   else{
-    $('.bottom-div').slideUp(); //
+    $('.bottom-div').slideUp();
   }
   num_list_calls += 1;
   $.ajax({
@@ -202,7 +209,7 @@ $("#btn-list").on('click', function(e) {
       var template = Handlebars.compile(source);
       var context = {first_name: response_data.contacts[i].first_name, last_name: response_data.contacts[i].last_name, number: response_data.numbers[i].phone_number, email: response_data.contacts[i].email};
       var html = template(context);
-      $('.bottom-div').append(html); 
+      $('.bottom-div').append(html);
     }
   })
 });
