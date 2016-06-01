@@ -5,7 +5,7 @@ end
 
 get '/contact/show' do
   content_type :json
-  @contact = Contact.find(params[:id].to_i)
+  @contact = Contact.find(params[:contact_id].to_i)
   {contact: @contact}.to_json
 end
 
@@ -17,7 +17,7 @@ post '/contact/new' do
   @contact.numbers << Number.new(phone_number:params[:number])
   @contact.email = params[:email]
   @contact.save
-  {contact: @contact}
+  {contact: @contact}.to_json
 end
 
 post '/contact/update' do
