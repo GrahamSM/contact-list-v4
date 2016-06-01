@@ -11,12 +11,12 @@ end
 
 post '/contact/new' do
   content_type :json
-  binding.pry
   @contact = Contact.new
-  @contact.first_name = params[:first]
-  @contact.last_name = params[:last]
-  @contact.numbers << Number.new(phone_number:params[:number])
-  @contact.email = params[:email]
+  @contact.first_name = params[:form_data][0]
+  @contact.last_name = params[:form_data][1]
+  @contact.numbers << Number.new(phone_number: params[:form_data][2])
+  @contact.email = params[:form_data][3]
+  binding.pry
   if @contact.save
     {contact: @contact}.to_json
   else

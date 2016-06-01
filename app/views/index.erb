@@ -90,7 +90,7 @@ $('.display-contact').hide();
 $('.bottom-div').hide(); //    TODO:IMPROVE???!
 
 
-function contactFormPathOnly(path_url){
+function contactFormNew(path_url){
   $('.new-contact-form').slideToggle();
   $('.new-contact-form').on('submit', function(event) {
     event.preventDefault();
@@ -100,12 +100,13 @@ function contactFormPathOnly(path_url){
     for (var i = 0; i < num_elements-1; i++){
       input_data.push(input_form.elements[i].value);
     }
+    debugger;
     $.ajax({
       url: path_url,
       type: 'POST',
-      data: JSON.stringify({ input_data: input_data }),
+      data: {form_data: input_data},
     }).done(function(response_data) {
-      $('.new-contact-form').slideUp(); //TODO: WHY ARENT WE HITTING THIS?!?!?!?
+      $('.new-contact-form').slideUp();
     })
   })
 }
@@ -127,7 +128,7 @@ function contactFormUpdate(path_url, id){
 }
 
 $("#btn-new").on('click', function(e) {
-  contactFormPathOnly('/contact/new')
+  contactFormNew('/contact/new')
 });
 
 $("#btn-show").on('click', function(e) {
