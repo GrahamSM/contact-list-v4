@@ -56,6 +56,12 @@
     <input type="submit" value="Submit">
 </form>
 
+<form class="number-contact-form" id="default-form-number" action="/contact/add_number" method="post">
+  <input id="contact_id" type="text" name="contact_id" placeholder="Contact ID"><br>
+  <input id="number" type="text" name="new_number" placeholder="Add Number"><br>
+  <input type="submit" value="Submit">
+</form>
+
 
 <div class="bottom-div">
 </div>
@@ -64,8 +70,8 @@
   <div class="display-contact">
     <div class="display-contact-inner">
     <h2 id="contact-name">{{first_name}} {{last_name}}</h2>
-    <p id="contact-email">{{email}}</p>
-    <p id="contact-primary">{{number}}</p>
+    <p id="contact-email">Email: {{email}}</p>
+    <p id="contact-primary">Primary #: {{number}}</p>
     <button type="button" class="btn btn-raised btn-primary" id="hide-contact-button">Hide</button>
     </div>
   </div>
@@ -75,8 +81,8 @@
   <div class="display-contact">
     <div class="display-contact-inner">
       <h2 id="contact-name">{{first_name}} {{last_name}}</h2>
-      <p id="contact-email">{{email}}</p>
-      <p id="contact-primary">{{number}}</p>
+      <p id="contact-email">Email: {{email}}</p>
+      <p id="contact-primary">Primary #: {{number}}</p>
     </div>
   </div>
 </script>
@@ -87,7 +93,8 @@ $('.new-contact-form').hide();
 $('.show-contact-form').hide();
 $('.delete-contact-form').hide();
 $('.display-contact').hide();
-$('.bottom-div').hide(); //    TODO:IMPROVE???!
+$('.bottom-div').hide();
+$('.number-contact-form').hide();
 
 
 function contactFormNew(path_url){
@@ -150,7 +157,7 @@ $("#btn-show").on('click', function(e) {
     }).done(function(response_data) {
       var source = $("#show-template").html();
       var template = Handlebars.compile(source);
-      var context = {first_name: response_data.contact.first_name, last_name: response_data.contact.last_name, email: response_data.contact.email};
+      var context = {first_name: response_data.contact.first_name, last_name: response_data.contact.last_name, number: response_data.numbers[0].phone_number, email: response_data.contact.email};
       var html = template(context);
       $('.bottom-div').append(html);
       $('.show-contact-form').slideUp();
@@ -164,7 +171,6 @@ $("#btn-update").on('click', function(e) {
   $('.show-contact-form').on('submit', function(event) {
     event.preventDefault();
     var input_form = document.getElementById("default-form-show");
-    var num_elements = input_form.elements.length;
     input_data = input_form.elements[0].value;
     $.ajax({
       url: $(this).attr('action'),
@@ -194,9 +200,9 @@ $("#btn-list").on('click', function(e) {
     for (var i = 0; i < response_data.contacts.length; i++){
       var source   = $("#list-template").html();
       var template = Handlebars.compile(source);
-      var context = {first_name: response_data.contacts[i].first_name, last_name: response_data.contacts[i].last_name, email: response_data.contacts[i].email};
+      var context = {first_name: response_data.contacts[i].first_name, last_name: response_data.contacts[i].last_name, number: response_data.numbers[i].phone_number, email: response_data.contacts[i].email};
       var html = template(context);
-      $('.bottom-div').append(html); //    TODO:IMPROVE???!
+      $('.bottom-div').append(html); 
     }
   })
 });
@@ -205,7 +211,6 @@ $('#btn-destroy').on('click', function(e){
   $('.delete-contact-form').slideToggle();
   $('.delete-contact-form').on('submit', function(event) {
     var input_form = document.getElementById("delete-contact-form");
-    var num_elements = input_form.elements.length;
     input_data = input_form.elements[0].value;
     $.ajax({
       url: $(this).attr('action'),
@@ -215,9 +220,27 @@ $('#btn-destroy').on('click', function(e){
       $('.delete-contact-form').slideUp();
     })
   })
-
+// PROPER PATHS FOR DESTROY AND WHATNOT
 })
 
+$('#btn-number').on('click', function(e){
+  $('.number-contact-form').slideToggle();
+  $('.number-contact-form').on('submit', function(event){
+    var input_form = document.getElementById("number-contact-form");
+    var num_elements = input_form.elements.length;
+    input_data = [];
+    for (var i = 0; i < num_elements-1; i++){
+      input_data.push(input_form.elements[i].value);
+    }
+    $.ajax({
+      url: $(this).attr('action'),
+      type: 'POST',
+      data: {form_data: input_data},
+    }).done(function(response_data){
+      $('.number-contact-form').slideUp();
+    })
+  })
+})
 
 $(document).on("click", "#hide-contact-button", function(){
   $('.bottom-div').slideUp();
