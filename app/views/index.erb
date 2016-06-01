@@ -5,7 +5,7 @@
 <div class="container">
   <div id="btn-list">
     <form>
-      <button type="button" class="btn btn-raised btn-primary">List</button>
+      <button type="button" class="btn btn-raised btn-primary" id="list-btn">List</button>
     </form>
   </div>
   <div id="btn-number">
@@ -28,7 +28,7 @@
   </div>
   <div id="btn-destroy">
     <form>
-      <button type="button" class="btn btn-raised btn-primary">Destroy</button>
+      <button type="button" class="btn btn-raised btn-primary" id="destroy-btn">Destroy</button>
     </form>
   </div>
 </div>
@@ -36,7 +36,7 @@
 
 
 
-<form class="new-contact-form" id = "default-form" action="/contact/new" method="post">
+<form class="new-contact-form" id = "default-form-new" action="/contact/new" method="post">
     <input id="first_name" type="text" name="first" placeholder="First Name"><br>
     <input id="last_name" type="text" name="last" placeholder="Last Name"><br>
     <input id="number" type="text" name="number" placeholder="Phone Number"><br>
@@ -46,7 +46,12 @@
 
 
 
-<form class="show-contact-form" id = "default-form" action="/contact/show" method="post">
+<form class="show-contact-form" id = "default-form-show" action="/contact/show" method="post">
+    <input id="contact_id" type="text" name="contact_id" placeholder="Contact ID"><br>
+    <input type="submit" value="Submit">
+</form>
+
+<form class="delete-contact-form" id = "default-form-delete" action="/contact/destroy" method="post">
     <input id="contact_id" type="text" name="contact_id" placeholder="Contact ID"><br>
     <input type="submit" value="Submit">
 </form>
@@ -80,6 +85,7 @@
 var num_list_calls = 0;
 $('.new-contact-form').hide();
 $('.show-contact-form').hide();
+$('.delete-contact-form').hide();
 $('.display-contact').hide();
 $('.bottom-div').hide(); //    TODO:IMPROVE???!
 
@@ -88,11 +94,16 @@ function contactFormPathOnly(path_url){
   $('.new-contact-form').slideToggle();
   $('.new-contact-form').on('submit', function(event) {
     event.preventDefault();
-    var form = $(this);
+    var input_form = document.getElementById("default-form-new");
+    var num_elements = input_form.elements.length;
+    input_data = [];
+    for (var i = 0; i < num_elements-1; i++){
+      input_data.push(input_form.elements[i].value);
+    }
     $.ajax({
       url: path_url,
       type: 'POST',
-      data: form.serialize()
+      data: JSON.stringify({ input_data: input_data }),
     }).done(function(response_data) {
       $('.new-contact-form').slideUp(); //TODO: WHY ARENT WE HITTING THIS?!?!?!?
     })
@@ -102,7 +113,7 @@ function contactFormPathOnly(path_url){
 function contactFormUpdate(path_url, id){
   $('.new-contact-form').slideToggle();
   $('.new-contact-form').on('submit', function(event) {
-
+    var form = $(this);
     event.preventDefault();
     $.ajax({
       url: path_url,
@@ -110,6 +121,7 @@ function contactFormUpdate(path_url, id){
       data: {form_data: form.serialize(), contact_id: id}
     }).done(function(response_data) {
       $('.new-contact-form').slideUp();
+      // SOMECOMMANDTOSHOWTHENEWCONTACT
     })
   })
 }
@@ -184,6 +196,21 @@ $("#btn-list").on('click', function(e) {
     }
   })
 });
+
+$('#btn-destroy').on('click', function(e){
+  $('.delete-contact-form').slideToggle();
+  $('.delete-contact-form').on('submit', function(event) {
+    var form = $(this);
+    $.ajax({
+      url: form.attr('action'),
+      type: 'POST',
+      data: form.serialize()
+    }).done(function(response_data){
+      $('.delete-contact-form').slideUp();
+    })
+  })
+
+})
 
 
 $(document).on("click", "#hide-contact-button", function(){

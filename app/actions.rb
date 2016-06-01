@@ -11,21 +11,35 @@ end
 
 post '/contact/new' do
   content_type :json
+  binding.pry
   @contact = Contact.new
   @contact.first_name = params[:first]
   @contact.last_name = params[:last]
   @contact.numbers << Number.new(phone_number:params[:number])
   @contact.email = params[:email]
-  @contact.save
-  {contact: @contact}.to_json
+  if @contact.save
+    {contact: @contact}.to_json
+  else
+    erb :index
+  end
 end
 
 post '/contact/update' do
-  @contact = Contact.find(params[:contact_id])
+  content_type :json
+  binding.pry
+  @contact = Contact.find(params[:contact_id].to_i)
   @contact.first_name = params[:first]
   @contact.last_name = params[:last]
   @contact.email = params[:email]
-  @contact.save
+  if !(@contact.save)
+    erb :index
+  end
+  {contact: @contact}.to_json
+end
+
+post '/contact/destroy' do
+  content_type :json
+  Contact.destroy(params[:contact_id])
 end
 
 get '/contacts/all' do

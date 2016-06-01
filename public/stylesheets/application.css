@@ -16,16 +16,19 @@
 
 .container h1{
   text-align: center;
+  font-family: sans-serif;
 }
 
 #title-container{
-  background-image: url("http://www.newell-fonda.k12.ia.us/wp-content/uploads/2016/01/opera-background-light-blue-facebook-cover-00435.jpg");
+  background: white;
+  border: 1px solid black;
+  border-radius: 5px;
 }
 /*End header*/
 
 /*buttons*/
 .btn{
-  background: #3498db;
+  background: #2980b9;
   padding: 5px;
   width: 150px;
   height: 100px;
@@ -34,7 +37,17 @@
   font-weight: bold;
   font-size: 2em;
   text-align: center;
+  font-family: sans-serif;
 }
+
+#destroy-btn{
+  background: #e74c3c;
+}
+
+#list-btn{
+  background: #27ae60;
+}
+
 
 #hide-button{
   background: #3498db;
@@ -45,6 +58,8 @@
   color: white;
   font-size: 1.25em;
   text-align: center;
+  font-family: sans-serif;
+
 }
 
 #hide-contact-button{
@@ -57,6 +72,8 @@
   font-weight: bold;
   font-size: 2em;
   text-align: center;
+  font-family: sans-serif;
+
 }
 /*end buttons*/
 
