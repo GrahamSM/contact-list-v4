@@ -37,9 +37,9 @@ post '/contact/update' do
   {contact: @contact}.to_json
 end
 
-post '/contact/destroy' do
-  content_type :json
+get '/contact/destroy' do
   Contact.destroy(params[:contact_id])
+  erb :index
 end
 
 get '/contacts/all' do

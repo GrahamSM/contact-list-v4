@@ -51,7 +51,7 @@
     <input type="submit" value="Submit">
 </form>
 
-<form class="delete-contact-form" id = "default-form-delete" action="/contact/destroy" method="post">
+<form class="delete-contact-form" id = "default-form-delete" action="/contact/destroy" method="get">
     <input id="contact_id" type="text" name="contact_id" placeholder="Contact ID"><br>
     <input type="submit" value="Submit">
 </form>
@@ -204,11 +204,13 @@ $("#btn-list").on('click', function(e) {
 $('#btn-destroy').on('click', function(e){
   $('.delete-contact-form').slideToggle();
   $('.delete-contact-form').on('submit', function(event) {
-    var form = $(this);
+    var input_form = document.getElementById("delete-contact-form");
+    var num_elements = input_form.elements.length;
+    input_data = input_form.elements[0].value;
     $.ajax({
-      url: form.attr('action'),
-      type: 'POST',
-      data: form.serialize()
+      url: $(this).attr('action'),
+      type: 'GET',
+      data: {form_data: input_data},
     }).done(function(response_data){
       $('.delete-contact-form').slideUp();
     })
