@@ -7,8 +7,9 @@ get '/contact/show' do
   content_type :json
   if Contact.find(params[:form_data].to_i)
     @contact = Contact.find(params[:form_data].to_i)
+    @numbers = @contact.numbers
   end
-  {contact: @contact}.to_json
+  {contact: @contact, numbers: @numbers}.to_json
 end
 
 post '/contact/new' do
@@ -28,10 +29,7 @@ end
 post '/contact/update' do
   content_type :json
   @contact = Contact.find(params[:contact_id].to_i)
-  @contact.first_name = params[:form_data][0]
-  @contact.last_name = params[:form_data][1]
-  @contact.email = params[:form_data][3]
-  if !(@contact.save)
+  if !(@contact.update(first_name: params[:form_data][0], last_name: params[:form_data][1], email: params[:form_data][3]))
     erb :index
   end
   {contact: @contact}.to_json
@@ -45,5 +43,18 @@ end
 get '/contacts/all' do
   content_type :json
   @contacts = Contact.all
-  {contacts: @contacts}.to_json
+  @numbers = []
+  @contacts.each do |contact|
+    @numbers << (contact.numbers.first || "")
+  end
+  {contacts: @contacts, numbers: @numbers}.to_json
+end
+
+post '/contact/add_number' do
+  content_type :json
+  binding.pry
+  @contact = Contact.find(params[:contact_id].to_i)
+  @number = Number.new(phone_number: params[:new_number])
+  @contact.numbers << @number
+  erb :index
 end
