@@ -170,3 +170,7 @@ input[type="submit"]:hover {
   background: linear-gradient(#79f, #37f 70%, #46f);
 }
 /*end input forms*/
+.bottom-div{
+  overflow-y: scroll;
+  max-height: 450px;
+}
